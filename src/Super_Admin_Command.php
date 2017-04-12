@@ -163,11 +163,3 @@ class Super_Admin_Command extends WP_CLI_Command {
 		return get_site_option( 'site_admins', array('admin') );
 	}
 }
-
-WP_CLI::add_command( 'super-admin', 'Super_Admin_Command', array(
-	'before_invoke' => function () {
-		if ( !is_multisite() ) {
-			WP_CLI::error( 'This is not a multisite install.' );
-		}
-	}
-) );
