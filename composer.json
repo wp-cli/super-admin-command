@@ -20,7 +20,9 @@
         "psr-4": {
             "": "src/"
         },
-        "files": [ "super-admin-command.php" ]
+        "files": [
+            "super-admin-command.php"
+        ]
     },
     "require": {},
     "require-dev": {
@@ -35,6 +37,7 @@
             "super-admin add",
             "super-admin list",
             "super-admin remove"
-        ]
+        ],
+        "bundled": true
     }
 }
