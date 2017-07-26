@@ -91,14 +91,14 @@ Feature: Manage super admins associated with a multisite instance
       """
     And STDOUT should be:
       """
-      Success: Revoked super-admin capabilities from 2 of 3 users. There are now no super-admin users.
+      Success: Revoked super-admin capabilities from 2 of 3 users. There are no remaining super admins.
       """
 
     When I run `wp super-admin add superadmin`
     And I run `wp super-admin remove admin superadmin`
     Then STDOUT should be:
       """
-      Success: Revoked super-admin capabilities from 1 of 2 users. There are now no super-admin users.
+      Success: Revoked super-admin capabilities from 1 of 2 users. There are no remaining super admins.
       """
     And STDERR should be empty
 
@@ -108,7 +108,7 @@ Feature: Manage super admins associated with a multisite instance
     When I try `wp super-admin remove superadmin`
     Then STDERR should be:
       """
-      Error: No super admins to revoke super admin privileges from.
+      Error: No super admins to revoke super-admin privileges from.
       """
     And STDOUT should be empty
     And the return code should be 1
@@ -117,7 +117,7 @@ Feature: Manage super admins associated with a multisite instance
     And I run `wp super-admin remove superadmin admin`
     Then STDOUT should be:
       """
-      Success: Revoked super-admin capabilities from 2 users. There are now no super-admin users.
+      Success: Revoked super-admin capabilities from 2 users. There are no remaining super admins.
       """
     And STDERR should be empty
 
@@ -164,7 +164,7 @@ Feature: Manage super admins associated with a multisite instance
     Then STDERR should be:
       """
       Warning: Invalid user ID, email or login: '999999'
-      Error: No valid user logins given to revoke super admin privileges from.
+      Error: No valid user logins given to revoke super-admin privileges from.
       """
     And STDOUT should be empty
     And the return code should be 1
