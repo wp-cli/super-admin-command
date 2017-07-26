@@ -151,7 +151,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	public function remove( $args, $_ ) {
 		$super_admins = self::get_admins();
 		if ( ! $super_admins ) {
-			WP_CLI::error( 'No super admins to revoke super admin privileges from.' );
+			WP_CLI::error( 'No super admins to revoke super-admin privileges from.' );
 		}
 
 		$users = $this->fetcher->get_many( $args );
@@ -169,7 +169,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 			$user_logins_count = count( $user_logins );
 		}
 		if ( ! $user_logins ) {
-			WP_CLI::error( 'No valid user logins given to revoke super admin privileges from.' );
+			WP_CLI::error( 'No valid user logins given to revoke super-admin privileges from.' );
 		}
 
 		$update_super_admins = array_diff( $super_admins, $user_logins );
@@ -187,7 +187,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 			$msg = "Revoked super-admin capabilities from {$successes} of {$user_logins_count} users.";
 		}
 		if ( ! $update_super_admins ) {
-			$msg .= ' There are now no super-admin users.';
+			$msg .= ' There are no remaining super admins.';
 		}
 		WP_CLI::success( $msg );
 	}
