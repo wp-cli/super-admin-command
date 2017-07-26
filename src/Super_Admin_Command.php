@@ -149,13 +149,47 @@ class Super_Admin_Command extends WP_CLI_Command {
 	 *     Success: Revoked super-admin capabilities.
 	 */
 	public function remove( $args, $_ ) {
-		$users = $this->fetcher->get_many( $args );
-		$user_logins = wp_list_pluck( $users, 'user_login' );
-
 		$super_admins = self::get_admins();
-		$super_admins = array_diff( $super_admins, $user_logins );
-		update_site_option( 'site_admins' , $super_admins );
-		WP_CLI::success( 'Revoked super-admin capabilities.' );
+		if ( ! $super_admins ) {
+			WP_CLI::error( 'No super admins to revoke super-admin privileges from.' );
+		}
+
+		$users = $this->fetcher->get_many( $args );
+		$user_logins = $users ? array_values( array_unique( wp_list_pluck( $users, 'user_login' ) ) ) : array();
+		$user_logins_count = count( $user_logins );
+
+		if ( $user_logins_count < count( $args ) ) {
+			$flipped_user_logins = array_flip( $user_logins );
+			// Fetcher has already warned so don't bother here, but continue with any args that are possible login names to cater for invalid users in the site options meta.
+
+			$user_logins = array_merge( $user_logins, array_unique( array_filter( $args, function ( $v ) use ( $flipped_user_logins ) {
+				// Exclude numeric and email-like logins (login names can be email-like but ignore this given the circumstances).
+				return ! isset( $flipped_user_logins[ $v ] ) && ! is_numeric( $v ) && ! is_email( $v );
+			} ) ) );
+			$user_logins_count = count( $user_logins );
+		}
+		if ( ! $user_logins ) {
+			WP_CLI::error( 'No valid user logins given to revoke super-admin privileges from.' );
+		}
+
+		$update_super_admins = array_diff( $super_admins, $user_logins );
+		if ( $update_super_admins === $super_admins ) {
+			WP_CLI::error( $user_logins_count  > 1 ? 'None of the given users is a super admin.' : 'The given user is not a super admin.' );
+		}
+
+		update_site_option( 'site_admins' , $update_super_admins );
+
+		$successes = count( $super_admins ) - count( $update_super_admins );
+		if ( $successes === $user_logins_count ) {
+			$message = $user_logins_count > 1 ? 'users' : 'user';
+			$msg = "Revoked super-admin capabilities from {$user_logins_count} {$message}.";
+		} else {
+			$msg = "Revoked super-admin capabilities from {$successes} of {$user_logins_count} users.";
+		}
+		if ( ! $update_super_admins ) {
+			$msg .= ' There are no remaining super admins.';
+		}
+		WP_CLI::success( $msg );
 	}
 
 	private static function get_admins() {

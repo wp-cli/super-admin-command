@@ -75,3 +75,106 @@ Feature: Manage super admins associated with a multisite instance
       Error: Only granted super-admin capabilities to 1 of 2 users.
       """
     And the return code should be 1
+
+    When I try `wp super-admin remove noadmin`
+    Then STDERR should be:
+      """
+      Warning: Invalid user ID, email or login: 'noadmin'
+      Error: The given user is not a super admin.
+      """
+    And the return code should be 1
+
+    When I run `wp super-admin remove admin admin@example.com noadmin superadmin`
+    Then STDERR should be:
+      """
+      Warning: Invalid user ID, email or login: 'noadmin'
+      """
+    And STDOUT should be:
+      """
+      Success: Revoked super-admin capabilities from 2 of 3 users. There are no remaining super admins.
+      """
+
+    When I run `wp super-admin add superadmin`
+    And I run `wp super-admin remove admin superadmin`
+    Then STDOUT should be:
+      """
+      Success: Revoked super-admin capabilities from 1 of 2 users. There are no remaining super admins.
+      """
+    And STDERR should be empty
+
+    When I run `wp super-admin list`
+    Then STDOUT should be empty
+
+    When I try `wp super-admin remove superadmin`
+    Then STDERR should be:
+      """
+      Error: No super admins to revoke super-admin privileges from.
+      """
+    And STDOUT should be empty
+    And the return code should be 1
+
+    When I run `wp super-admin add superadmin admin`
+    And I run `wp super-admin remove superadmin admin`
+    Then STDOUT should be:
+      """
+      Success: Revoked super-admin capabilities from 2 users. There are no remaining super admins.
+      """
+    And STDERR should be empty
+
+    When I run `wp super-admin list`
+    Then STDOUT should be empty
+
+    When I run `wp user create admin2 admin2@example.com`
+    And I run `wp super-admin add superadmin admin admin2`
+    And I run `wp super-admin list`
+    Then STDOUT should be:
+      """
+      superadmin
+      admin
+      admin2
+      """
+
+    When I run `wp eval 'global $wpdb; $wpdb->delete( $wpdb->users, array( "user_login" => "admin2" ) );'`
+    And I run `wp user list --field=user_login --orderby=user_login`
+    Then STDOUT should be:
+      """
+      admin
+      superadmin
+      """
+
+    And I run `wp super-admin list`
+    Then STDOUT should be:
+      """
+      superadmin
+      admin
+      admin2
+      """
+
+    When I run `wp super-admin remove admin2`
+    Then STDERR should be:
+      """
+      Warning: Invalid user ID, email or login: 'admin2'
+      """
+    And STDOUT should be:
+      """
+      Success: Revoked super-admin capabilities from 1 user.
+      """
+
+    When I try `wp super-admin remove 999999`
+    Then STDERR should be:
+      """
+      Warning: Invalid user ID, email or login: '999999'
+      Error: No valid user logins given to revoke super-admin privileges from.
+      """
+    And STDOUT should be empty
+    And the return code should be 1
+
+    When I run `wp user create notadmin notadmin@example.com`
+    And I try `wp super-admin remove notadmin notuser`
+    Then STDERR should be:
+      """
+      Warning: Invalid user ID, email or login: 'notuser'
+      Error: None of the given users is a super admin.
+      """
+    And STDOUT should be empty
+    And the return code should be 1
