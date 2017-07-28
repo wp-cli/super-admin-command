@@ -178,3 +178,44 @@ Feature: Manage super admins associated with a multisite instance
       """
     And STDOUT should be empty
     And the return code should be 1
+
+  Scenario: Manage a super admin user_login 'admin'
+    Given a WP multisite install
+
+    When I run `wp user get admin --field=user_login`
+    Then STDOUT should contain:
+      """
+      admin
+      """
+
+    When I run `wp super-admin add admin`
+    Then STDOUT should be:
+      """
+      Success: Super admins remain unchanged.
+      """
+    And STDERR should be:
+      """
+      Warning: User 'admin' already has super-admin capabilities.
+      """
+
+    When I run `wp super-admin remove admin`
+    Then STDOUT should be:
+      """
+      Success: Revoked super-admin capabilities from 1 user. There are no remaining super admins.
+      """
+
+    When I run `wp super-admin list`
+    Then STDOUT should be empty
+
+    When I run `wp super-admin add admin`
+    Then STDOUT should be:
+      """
+      Success: Granted super-admin capabilities to 1 user.
+      """
+    And STDERR should be empty
+
+    When I run `wp super-admin list`
+    Then STDOUT should be:
+      """
+      admin
+      """
