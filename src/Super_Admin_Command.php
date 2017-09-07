@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Manage super admins on WordPress multisite.
+ * Lists, adds, or removes super admin users on a multisite install.
  *
  * ## EXAMPLES
  *
