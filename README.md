@@ -1,7 +1,7 @@
 wp-cli/super-admin-command
 ==========================
 
-Manage super admins on WordPress multisite.
+Lists, adds, or removes super admin users on a multisite install.
 
 [![Build Status](https://travis-ci.org/wp-cli/super-admin-command.svg?branch=master)](https://travis-ci.org/wp-cli/super-admin-command)
 
