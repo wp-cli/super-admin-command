@@ -87,6 +87,12 @@ $steps->Given( '/^a WP install with Composer$/',
 	}
 );
 
+$steps->Given( "/^a WP install with Composer and a custom vendor directory '([^\s]+)'$/",
+	function ( $world, $vendor_directory ) {
+		$world->install_wp_with_composer( $vendor_directory );
+	}
+);
+
 $steps->Given( '/^a WP multisite (subdirectory|subdomain)?\s?install$/',
 	function ( $world, $type = 'subdirectory' ) {
 		$world->install_wp();
@@ -203,5 +209,11 @@ $steps->Given( '/^a dependency on current wp-cli$/',
 $steps->Given( '/^a PHP built-in web server$/',
 	function ( $world ) {
 		$world->start_php_server();
+	}
+);
+
+$steps->Given( "/^a PHP built-in web server to serve '([^\s]+)'$/",
+	function ( $world, $subdir ) {
+		$world->start_php_server( $subdir );
 	}
 );
