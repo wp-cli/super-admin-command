@@ -23,7 +23,7 @@ Feature: Manage super admins associated with a multisite instance
       superadmin
       """
 
-    When I run `wp super-admin add superadmin`
+    When I try `wp super-admin add superadmin`
     Then STDERR should be:
       """
       Warning: User 'superadmin' already has super-admin capabilities.
@@ -84,7 +84,7 @@ Feature: Manage super admins associated with a multisite instance
       """
     And the return code should be 1
 
-    When I run `wp super-admin remove admin admin@example.com noadmin superadmin`
+    When I try `wp super-admin remove admin admin@example.com noadmin superadmin`
     Then STDERR should be:
       """
       Warning: Invalid user ID, email or login: 'noadmin'
@@ -95,7 +95,7 @@ Feature: Manage super admins associated with a multisite instance
       """
 
     When I run `wp super-admin add superadmin`
-    And I run `wp super-admin remove admin superadmin`
+    And I try `wp super-admin remove admin superadmin`
     Then STDOUT should be:
       """
       Success: Revoked super-admin capabilities from 1 of 2 users. There are no remaining super admins.
@@ -150,7 +150,7 @@ Feature: Manage super admins associated with a multisite instance
       admin2
       """
 
-    When I run `wp super-admin remove admin2`
+    When I try `wp super-admin remove admin2`
     Then STDERR should be:
       """
       Warning: Invalid user ID, email or login: 'admin2'
@@ -188,7 +188,7 @@ Feature: Manage super admins associated with a multisite instance
       admin
       """
 
-    When I run `wp super-admin add admin`
+    When I try `wp super-admin add admin`
     Then STDOUT should be:
       """
       Success: Super admins remain unchanged.
