@@ -31,7 +31,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	}
 
 	/**
-	 * List users with super admin capabilities.
+	 * Lists users with super admin capabilities.
 	 *
 	 * ## OPTIONS
 	 *
@@ -80,7 +80,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	}
 
 	/**
-	 * Grant super admin privileges to one or more users.
+	 * Grants super admin privileges to one or more users.
 	 *
 	 * ## OPTIONS
 	 *
@@ -136,7 +136,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	}
 
 	/**
-	 * Remove super admin privileges from one or more users.
+	 * Removes super admin privileges from one or more users.
 	 *
 	 * ## OPTIONS
 	 *
