@@ -1,6 +1,6 @@
 {
     "name": "wp-cli/super-admin-command",
-    "description": "Lists, adds, or removes super admin users on a multisite install.",
+    "description": "Lists, adds, or removes super admin users on a multisite installation.",
     "type": "wp-cli-package",
     "homepage": "https://github.com/wp-cli/super-admin-command",
     "support": {
@@ -34,6 +34,7 @@
             "dev-master": "1.x-dev"
         },
         "commands": [
+            "super-admin",
             "super-admin add",
             "super-admin list",
             "super-admin remove"
