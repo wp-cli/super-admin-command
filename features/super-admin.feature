@@ -1,7 +1,7 @@
 Feature: Manage super admins associated with a multisite instance
 
   Scenario: Add, list, and remove super admins.
-    Given a WP multisite install
+    Given a WP multisite installation
     When I run `wp user create superadmin superadmin@example.com`
     And I run `wp super-admin list`
     Then STDOUT should be:
@@ -180,7 +180,7 @@ Feature: Manage super admins associated with a multisite instance
     And the return code should be 1
 
   Scenario: Manage a super admin user_login 'admin'
-    Given a WP multisite install
+    Given a WP multisite installation
 
     When I run `wp user get admin --field=user_login`
     Then STDOUT should contain:

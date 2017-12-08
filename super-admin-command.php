@@ -12,7 +12,7 @@ if ( file_exists( $autoload ) ) {
 WP_CLI::add_command( 'super-admin', 'Super_Admin_Command', array(
 	'before_invoke' => function () {
 		if ( !is_multisite() ) {
-			WP_CLI::error( 'This is not a multisite install.' );
+			WP_CLI::error( 'This is not a multisite installation.' );
 		}
 	}
 ) );
