@@ -1,4 +1,5 @@
 <?php
+
 use WP_CLI\Fetchers\User as UserFetcher;
 
 /**
@@ -23,9 +24,9 @@ use WP_CLI\Fetchers\User as UserFetcher;
  */
 class Super_Admin_Command extends WP_CLI_Command {
 
-	private $fields = array(
+	private $fields = [
 		'user_login',
-	);
+	];
 
 	public function __construct() {
 		$this->fetcher = new UserFetcher();
@@ -66,7 +67,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 				WP_CLI::line( $user_login );
 			}
 		} else {
-			$output_users = array();
+			$output_users = [];
 			foreach ( $super_admins as $user_login ) {
 				$output_user = new stdClass();
 
@@ -97,20 +98,25 @@ class Super_Admin_Command extends WP_CLI_Command {
 		$successes = 0;
 		$errors    = 0;
 		$users     = $this->fetcher->get_many( $args );
+
 		if ( count( $users ) !== count( $args ) ) {
 			$errors = count( $args ) - count( $users );
 		}
-		$user_logins      = wp_list_pluck( $users, 'user_login' );
+
 		$super_admins     = self::get_admins();
 		$num_super_admins = count( $super_admins );
 
-		foreach ( $user_logins as $user_login ) {
-			if ( in_array( $user_login, $super_admins, true ) ) {
-				WP_CLI::warning( "User '{$user_login}' already has super-admin capabilities." );
+		$new_super_admins = [];
+		foreach ( $users as $user ) {
+			do_action( 'grant_super_admin', (int) $user->ID );
+
+			if ( in_array( $user->user_login, $super_admins, true ) ) {
+				WP_CLI::warning( "User '{$user->user_login}' already has super-admin capabilities." );
 				continue;
 			}
 
-			$super_admins[] = $user_login;
+			$new_super_admins[] = $user->ID;
+			$super_admins[]     = $user->user_login;
 			$successes++;
 		}
 
@@ -133,6 +139,10 @@ class Super_Admin_Command extends WP_CLI_Command {
 			} else {
 				WP_CLI::error( 'Site options update failed.' );
 			}
+		}
+
+		foreach ( $new_super_admins as $user_id ) {
+			do_action( 'granted_super_admin', (int) $user_id );
 		}
 	}
 
@@ -158,6 +168,13 @@ class Super_Admin_Command extends WP_CLI_Command {
 		$users             = $this->fetcher->get_many( $args );
 		$user_logins       = $users ? array_values( array_unique( wp_list_pluck( $users, 'user_login' ) ) ) : array();
 		$user_logins_count = count( $user_logins );
+
+		$user_ids = [];
+		foreach ( $users as $user ) {
+			$user_ids[ $user->user_login ] = $user->ID;
+
+			do_action( 'revoke_super_admin', (int) $user->ID );
+		}
 
 		if ( $user_logins_count < count( $args ) ) {
 			$flipped_user_logins = array_flip( $user_logins );
@@ -199,10 +216,15 @@ class Super_Admin_Command extends WP_CLI_Command {
 			$msg .= ' There are no remaining super admins.';
 		}
 		WP_CLI::success( $msg );
+
+		$removed_logins = array_intersect( $user_logins, $super_admins );
+		foreach ( $removed_logins as $user_login ) {
+			do_action( 'revoked_super_admin', (int) $user_ids[ $user_login ] );
+		}
 	}
 
 	private static function get_admins() {
 		// We don't use get_super_admins() because we don't want to mess with the global
-		return (array) get_site_option( 'site_admins', array( 'admin' ) );
+		return (array) get_site_option( 'site_admins', [ 'admin' ] );
 	}
 }
