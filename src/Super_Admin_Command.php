@@ -194,13 +194,6 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 	private static function get_admins() {
 		// We don't use get_super_admins() because we don't want to mess with the global
-		$site_admins = get_site_option( 'site_admins', array('admin') );
-
-		// If there are no super admins, return empty array to prevent problems further in the code
-		if ( ! $site_admins ) {
-			$site_admins = array();
-		}
-
-		return $site_admins;
+		return (array) get_site_option( 'site_admins', array('admin') );
 	}
 }
