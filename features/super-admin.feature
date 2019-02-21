@@ -219,3 +219,16 @@ Feature: Manage super admins associated with a multisite instance
       """
       admin
       """
+
+  Scenario: Handle a site with an empty site_admins option without errors
+    Given a WP multisite installation
+
+    When I run `wp site option set site_admins ''`
+    Then STDOUT should be:
+      """
+      Success: Updated 'site_admins' site option.
+      """
+    And STDERR should be empty
+
+    When I run `wp super-admin list`
+    Then STDERR should be empty
