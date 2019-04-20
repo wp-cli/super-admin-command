@@ -93,7 +93,8 @@ class Super_Admin_Command extends WP_CLI_Command {
 	 */
 	public function add( $args, $_ ) {
 
-		$successes = $errors = 0;
+		$successes = 0;
+		$errors    = 0;
 		$users     = $this->fetcher->get_many( $args );
 		if ( count( $users ) !== count( $args ) ) {
 			$errors = count( $args ) - count( $users );
