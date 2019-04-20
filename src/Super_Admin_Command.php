@@ -57,7 +57,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	 *
 	 * @subcommand list
 	 */
-	public function _list( $_, $assoc_args ) {
+	public function list_( $_, $assoc_args ) {
 		$super_admins = self::get_admins();
 
 		if ( 'list' === $assoc_args['format'] ) {
@@ -95,7 +95,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 		$successes = $errors = 0;
 		$users     = $this->fetcher->get_many( $args );
-		if ( count( $users ) != count( $args ) ) {
+		if ( count( $users ) !== count( $args ) ) {
 			$errors = count( $args ) - count( $users );
 		}
 		$user_logins      = wp_list_pluck( $users, 'user_login' );
@@ -103,7 +103,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 		$num_super_admins = count( $super_admins );
 
 		foreach ( $user_logins as $user_login ) {
-			if ( in_array( $user_login, $super_admins ) ) {
+			if ( in_array( $user_login, $super_admins, true ) ) {
 				WP_CLI::warning( "User '{$user_login}' already has super-admin capabilities." );
 				continue;
 			}
@@ -112,7 +112,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 			$successes++;
 		}
 
-		if ( $num_super_admins === count( $super_admins ) ) {
+		if ( $count( $super_admins ) === $num_super_admins ) {
 			if ( $errors ) {
 				$user_count = count( $args );
 				WP_CLI::error( "Couldn't grant super-admin capabilities to {$errors} of {$user_count} users." );
