@@ -113,7 +113,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 			$successes++;
 		}
 
-		if ( $count( $super_admins ) === $num_super_admins ) {
+		if ( count( $super_admins ) === $num_super_admins ) {
 			if ( $errors ) {
 				$user_count = count( $args );
 				WP_CLI::error( "Couldn't grant super-admin capabilities to {$errors} of {$user_count} users." );
