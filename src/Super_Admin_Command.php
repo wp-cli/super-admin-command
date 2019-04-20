@@ -1,4 +1,5 @@
 <?php
+use WP_CLI\Fetchers\User as UserFetcher;
 
 /**
  * Lists, adds, or removes super admin users on a multisite installation.
@@ -27,7 +28,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	);
 
 	public function __construct() {
-		$this->fetcher = new \WP_CLI\Fetchers\User();
+		$this->fetcher = new UserFetcher();
 	}
 
 	/**
@@ -57,7 +58,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	 *
 	 * @subcommand list
 	 */
-	public function list_( $_, $assoc_args ) {
+	public function list_subcommand( $_, $assoc_args ) {
 		$super_admins = self::get_admins();
 
 		if ( 'list' === $assoc_args['format'] ) {
