@@ -108,7 +108,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 		$new_super_admins = [];
 		foreach ( $users as $user ) {
-			do_action( 'grant_super_admin', (int) $user->ID );
+			do_action( 'grant_super_admin', (int) $user->ID ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 			if ( in_array( $user->user_login, $super_admins, true ) ) {
 				WP_CLI::warning( "User '{$user->user_login}' already has super-admin capabilities." );
@@ -142,7 +142,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 		}
 
 		foreach ( $new_super_admins as $user_id ) {
-			do_action( 'granted_super_admin', (int) $user_id );
+			do_action( 'granted_super_admin', (int) $user_id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		}
 	}
 
@@ -173,7 +173,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 		foreach ( $users as $user ) {
 			$user_ids[ $user->user_login ] = $user->ID;
 
-			do_action( 'revoke_super_admin', (int) $user->ID );
+			do_action( 'revoke_super_admin', (int) $user->ID ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		}
 
 		if ( $user_logins_count < count( $args ) ) {
@@ -199,7 +199,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 		}
 
 		// Ensure we always have an ID for all logins.
-		foreach( $user_logins as $user_login ) {
+		foreach ( $user_logins as $user_login ) {
 			if ( ! array_key_exists( $user_login, $user_ids ) ) {
 				$user                    = get_user_by( 'login', $user_login );
 				$user_ids[ $user_login ] = $user->ID;
@@ -227,7 +227,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 		$removed_logins = array_intersect( $user_logins, $super_admins );
 		foreach ( $removed_logins as $user_login ) {
-			do_action( 'revoked_super_admin', (int) $user_ids[ $user_login ] );
+			do_action( 'revoked_super_admin', (int) $user_ids[ $user_login ] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		}
 	}
 
