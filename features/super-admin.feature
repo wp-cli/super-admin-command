@@ -254,16 +254,7 @@ Feature: Manage super admins associated with a multisite instance
       """
 
     When I run `wp user create superadmin superadmin@example.com`
-    Then STDOUT should contain:
-      """
-      grant_super_admin hook was fired.
-      """
-    And STDOUT should contain:
-      """
-      granted_super_admin hook was fired.
-      """
-
-    When I run `wp super-admin add superadmin`
+    And I run `wp super-admin add superadmin`
     Then STDOUT should contain:
       """
       grant_super_admin hook was fired.
@@ -294,7 +285,7 @@ Feature: Manage super admins associated with a multisite instance
       """
 
     When I try `wp super-admin add noadmin`
-    Then STDOUT should contain:
+    Then STDOUT should not contain:
       """
       grant_super_admin hook was fired.
       """
@@ -314,7 +305,7 @@ Feature: Manage super admins associated with a multisite instance
       """
 
     When I try `wp super-admin remove noadmin`
-    Then STDOUT should contain:
+    Then STDOUT should not contain:
       """
       revoke_super_admin hook was fired.
       """
