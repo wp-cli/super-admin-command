@@ -166,7 +166,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 		}
 
 		$users             = $this->fetcher->get_many( $args );
-		$user_logins       = $users ? array_values( array_unique( wp_list_pluck( $users, 'user_login' ) ) ) : array();
+		$user_logins       = $users ? array_values( array_unique( wp_list_pluck( $users, 'user_login' ) ) ) : [];
 		$user_logins_count = count( $user_logins );
 
 		$user_ids = [];
@@ -185,7 +185,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 				array_unique(
 					array_filter(
 						$args,
-						function ( $v ) use ( $flipped_user_logins ) {
+						static function ( $v ) use ( $flipped_user_logins ) {
 							// Exclude numeric and email-like logins (login names can be email-like but ignore this given the circumstances).
 							return ! isset( $flipped_user_logins[ $v ] ) && ! is_numeric( $v ) && ! is_email( $v );
 						}
@@ -196,6 +196,14 @@ class Super_Admin_Command extends WP_CLI_Command {
 		}
 		if ( ! $user_logins ) {
 			WP_CLI::error( 'No valid user logins given to revoke super-admin privileges from.' );
+		}
+
+		// Ensure we always have an ID for all logins.
+		foreach( $user_logins as $user_login ) {
+			if ( ! array_key_exists( $user_login, $user_ids ) ) {
+				$user                    = get_user_by( 'login', $user_login );
+				$user_ids[ $user_login ] = $user->ID;
+			}
 		}
 
 		$update_super_admins = array_diff( $super_admins, $user_logins );
