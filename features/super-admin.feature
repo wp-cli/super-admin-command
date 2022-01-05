@@ -234,7 +234,7 @@ Feature: Manage super admins associated with a multisite instance
     When I run `wp super-admin list`
     Then STDERR should be empty
 
-  Scenario: Add, list, and remove super admins.
+  Scenario: Hooks should be firing as expected
     Given a WP multisite installation
     And a wp-content/mu-plugins/test-hooks.php file:
       """
