@@ -198,14 +198,6 @@ class Super_Admin_Command extends WP_CLI_Command {
 			WP_CLI::error( 'No valid user logins given to revoke super-admin privileges from.' );
 		}
 
-		// Ensure we always have an ID for all logins.
-		foreach ( $user_logins as $user_login ) {
-			if ( ! array_key_exists( $user_login, $user_ids ) ) {
-				$user                    = get_user_by( 'login', $user_login );
-				$user_ids[ $user_login ] = $user->ID;
-			}
-		}
-
 		$update_super_admins = array_diff( $super_admins, $user_logins );
 		if ( $update_super_admins === $super_admins ) {
 			WP_CLI::error( $user_logins_count > 1 ? 'None of the given users is a super admin.' : 'The given user is not a super admin.' );
@@ -226,8 +218,22 @@ class Super_Admin_Command extends WP_CLI_Command {
 		WP_CLI::success( $msg );
 
 		$removed_logins = array_intersect( $user_logins, $super_admins );
+
 		foreach ( $removed_logins as $user_login ) {
-			do_action( 'revoked_super_admin', (int) $user_ids[ $user_login ] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$user_id = null;
+
+			if ( array_key_exists( $user_login, $user_ids ) ) {
+				$user_id = $user_ids[ $user_login ];
+			} else {
+				$user = get_user_by( 'login', $user_login );
+				if ( $user instanceof WP_User ) {
+					$user_id = $user->ID;
+				}
+			}
+
+			if ( null !== $user_id ) {
+				do_action( 'revoked_super_admin', (int) $user_ids[ $user_login ] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			}
 		}
 	}
 
