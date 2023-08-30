@@ -4,7 +4,7 @@ if ( ! class_exists( 'WP_CLI' ) ) {
 	return;
 }
 
-$wpcli_super_admin_autoloader = dirname( __FILE__ ) . '/vendor/autoload.php';
+$wpcli_super_admin_autoloader = __DIR__ . '/vendor/autoload.php';
 if ( file_exists( $wpcli_super_admin_autoloader ) ) {
 	require_once $wpcli_super_admin_autoloader;
 }

@@ -117,7 +117,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 			$new_super_admins[] = $user->ID;
 			$super_admins[]     = $user->user_login;
-			$successes++;
+			++$successes;
 		}
 
 		if ( count( $super_admins ) === $num_super_admins ) {
@@ -127,18 +127,16 @@ class Super_Admin_Command extends WP_CLI_Command {
 			} else {
 				WP_CLI::success( 'Super admins remain unchanged.' );
 			}
-		} else {
-			if ( update_site_option( 'site_admins', $super_admins ) ) {
-				if ( $errors ) {
-					$user_count = count( $args );
-					WP_CLI::error( "Only granted super-admin capabilities to {$successes} of {$user_count} users." );
-				} else {
-					$message = $successes > 1 ? 'users' : 'user';
-					WP_CLI::success( "Granted super-admin capabilities to {$successes} {$message}." );
-				}
+		} elseif ( update_site_option( 'site_admins', $super_admins ) ) {
+			if ( $errors ) {
+				$user_count = count( $args );
+				WP_CLI::error( "Only granted super-admin capabilities to {$successes} of {$user_count} users." );
 			} else {
-				WP_CLI::error( 'Site options update failed.' );
+				$message = $successes > 1 ? 'users' : 'user';
+				WP_CLI::success( "Granted super-admin capabilities to {$successes} {$message}." );
 			}
+		} else {
+			WP_CLI::error( 'Site options update failed.' );
 		}
 
 		foreach ( $new_super_admins as $user_id ) {
