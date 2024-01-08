@@ -28,6 +28,8 @@ class Super_Admin_Command extends WP_CLI_Command {
 		'user_login',
 	];
 
+	private $fetcher;
+
 	public function __construct() {
 		$this->fetcher = new UserFetcher();
 	}
