@@ -21,18 +21,18 @@ wp super-admin
 
 **EXAMPLES**
 
-    # List user with super-admin capabilities
+    # List user with super-admin capabilities.
     $ wp super-admin list
     supervisor
     administrator
 
     # Grant super-admin privileges to the user.
     $ wp super-admin add superadmin2
-    Success: Granted super-admin capabilities.
+    Success: Granted super-admin capabilities to 1 user.
 
-    # Revoke super-admin privileges to the user.
+    # Revoke super-admin privileges from the user.
     $ wp super-admin remove superadmin2
-    Success: Revoked super-admin capabilities.
+    Success: Revoked super-admin capabilities from 1 user.
 
 
 
@@ -51,8 +51,9 @@ wp super-admin add <user>...
 
 **EXAMPLES**
 
+    # Grant super-admin privileges to the user.
     $ wp super-admin add superadmin2
-    Success: Granted super-admin capabilities.
+    Success: Granted super-admin capabilities to 1 user.
 
 
 
@@ -81,7 +82,7 @@ wp super-admin list [--format=<format>]
 
 **EXAMPLES**
 
-    # List user with super-admin capabilities
+    # List user with super-admin capabilities.
     $ wp super-admin list
     supervisor
     administrator
@@ -103,8 +104,9 @@ wp super-admin remove <user>...
 
 **EXAMPLES**
 
+    # Revoke super-admin privileges from the user.
     $ wp super-admin remove superadmin2
-    Success: Revoked super-admin capabilities.
+    Success: Revoked super-admin capabilities from 1 user.
 
 ## Installing
 
