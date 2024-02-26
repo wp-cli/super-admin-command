@@ -49,6 +49,7 @@ class Super_Admin_Command extends WP_CLI_Command {
 	 *   - csv
 	 *   - json
 	 *   - count
+	 *   - ids
 	 *   - yaml
 	 * ---
 	 *
@@ -77,8 +78,14 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 				$output_users[] = $output_user;
 			}
-			$formatter = new \WP_CLI\Formatter( $assoc_args, $this->fields );
-			$formatter->display_items( $output_users );
+
+			if ( ! empty( $assoc_args['format'] ) && 'ids' === $assoc_args['format'] ) {
+				$formatter = new \WP_CLI\Formatter( $assoc_args );
+				$formatter->display_items( wp_list_pluck( $output_users, 'user_login' ) );
+			} else {
+				$formatter = new \WP_CLI\Formatter( $assoc_args, $this->fields );
+				$formatter->display_items( $output_users );
+			}
 		}
 	}
 
