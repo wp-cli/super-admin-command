@@ -77,6 +77,7 @@ wp super-admin list [--format=<format>]
 		  - csv
 		  - json
 		  - count
+		  - ids
 		  - yaml
 		---
 
