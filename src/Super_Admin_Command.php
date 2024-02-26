@@ -81,7 +81,13 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 			if ( ! empty( $assoc_args['format'] ) && 'ids' === $assoc_args['format'] ) {
 				$formatter = new \WP_CLI\Formatter( $assoc_args );
-				$formatter->display_items( wp_list_pluck( $output_users, 'user_login' ) );
+
+				$user_ids = [];
+				foreach ( $super_admins as $user_login ) {
+					$user_obj   = get_user_by( 'login', $user_login );
+					$user_ids[] = $user_obj->ID;
+				}
+				$formatter->display_items( $user_ids );
 			} else {
 				$formatter = new \WP_CLI\Formatter( $assoc_args, $this->fields );
 				$formatter->display_items( $output_users );
