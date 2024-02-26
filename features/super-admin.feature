@@ -180,6 +180,22 @@ Feature: Manage super admins associated with a multisite instance
     And STDOUT should be empty
     And the return code should be 1
 
+  Scenario: List super admins in ids format.
+    Given a WP multisite installation
+
+    When I run `wp user get admin --field=ID`
+    And save STDOUT as {USER_1}
+
+    When I run `wp user create admin2 admin2@example.com --porcelain`
+    And save STDOUT as {USER_2}
+
+    When I run `wp super-admin add admin2`
+    And I run `wp super-admin list --format=ids`
+    Then STDOUT should be:
+      """
+      {USER_1} {USER_2}
+      """
+
   Scenario: Manage a super admin user_login 'admin'
     Given a WP multisite installation
 
