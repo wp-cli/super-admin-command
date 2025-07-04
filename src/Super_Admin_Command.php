@@ -24,10 +24,16 @@ use WP_CLI\Fetchers\User as UserFetcher;
  */
 class Super_Admin_Command extends WP_CLI_Command {
 
+	/**
+	 * @var array<string>
+	 */
 	private $fields = [
 		'user_login',
 	];
 
+	/**
+	 * @var \WP_CLI\Fetchers\User
+	 */
 	private $fetcher;
 
 	public function __construct() {
@@ -84,6 +90,9 @@ class Super_Admin_Command extends WP_CLI_Command {
 
 				$user_ids = [];
 				foreach ( $super_admins as $user_login ) {
+					/**
+					 * @var \WP_User $user_obj
+					 */
 					$user_obj   = get_user_by( 'login', $user_login );
 					$user_ids[] = $user_obj->ID;
 				}
