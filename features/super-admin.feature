@@ -135,7 +135,13 @@ Feature: Manage super admins associated with a multisite instance
       admin2
       """
 
-    When I run `wp eval 'global $wpdb; $wpdb->delete( $wpdb->users, array( "user_login" => "admin2" ) );'`
+    Given a delete-user.php file:
+      """
+      <?php
+      global $wpdb;
+      $wpdb->delete( $wpdb->users, array( 'user_login' => 'admin2' ) );
+      """
+    When I run `wp eval-file delete-user.php`
     And I run `wp eval 'wp_cache_flush();'`
     And I run `wp user list --field=user_login --orderby=user_login`
     Then STDOUT should be:
