@@ -11,3 +11,15 @@ parameters:
   ignoreErrors:
     - identifier: missingType.parameter
     - identifier: missingType.return
+
+    # johnbillion/wp-compat checks every WordPress symbol against the WordPress 4.9
+    # baseline that wp-cli-tests configures, and reports anything newer.
+
+    # WordPress 5.3 only formalized the already documented `...$arg` parameter of
+    # `do_action()` by adding it to the function signature. Additional arguments were
+    # collected through `func_get_args()` before that, so passing the user ID to
+    # `grant_super_admin` and friends has always worked. The identifier already names one
+    # specific parameter of one specific function.
+    -
+      identifier: WPCompat.parameterNotAvailable.doaction.arg
+      path: src/Super_Admin_Command.php
