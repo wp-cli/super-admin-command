@@ -262,18 +262,30 @@ Feature: Manage super admins associated with a multisite instance
     And a wp-content/mu-plugins/test-hooks.php file:
       """
       <?php
-      add_action( 'grant_super_admin', static function () {
-        WP_CLI::log( 'grant_super_admin hook was fired.' );
-      });
-      add_action( 'granted_super_admin', static function () {
-        WP_CLI::log( 'granted_super_admin hook was fired.' );
-      });
-      add_action( 'revoke_super_admin', static function () {
-        WP_CLI::log( 'revoke_super_admin hook was fired.' );
-      });
-      add_action( 'revoked_super_admin', static function () {
-        WP_CLI::log( 'revoked_super_admin hook was fired.' );
-      });
+      add_action(
+          'grant_super_admin',
+          static function () {
+              WP_CLI::log( 'grant_super_admin hook was fired.' );
+          }
+      );
+      add_action(
+          'granted_super_admin',
+          static function () {
+              WP_CLI::log( 'granted_super_admin hook was fired.' );
+          }
+      );
+      add_action(
+          'revoke_super_admin',
+          static function () {
+              WP_CLI::log( 'revoke_super_admin hook was fired.' );
+          }
+      );
+      add_action(
+          'revoked_super_admin',
+          static function () {
+              WP_CLI::log( 'revoked_super_admin hook was fired.' );
+          }
+      );
       """
 
     When I run `wp user create superadmin superadmin@example.com`
